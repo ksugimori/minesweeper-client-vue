@@ -1,7 +1,7 @@
 import Status from '@/models/status/Status.js'
 import Point from '@/models/util/Point.js'
-import Game from '@/models/Game.js'
-jest.mock('@/models/Game.js')
+import Game from '../../../../src/models/Game'
+jest.mock('../../../../src/models/Game')
 
 beforeEach(() => {
   Game.mockClear()
