@@ -17,6 +17,17 @@
       </div>
     </header>
     <main>
+      <button
+        id="post_btn"
+        @click="post"
+      >
+        New Game
+      </button>
+      <button
+        @click="open(0, 0)"
+      >
+        OPEN
+      </button>
       <router-view />
     </main>
   </div>
@@ -24,9 +35,35 @@
 
 <script>
 import 'normalize.css'
+import axios from 'axios'
 
 export default {
-  name: 'App'
+  name: 'App',
+  data: function () {
+    return { client: axios.create({
+      baseURL: '/api'
+    }) }
+  },
+  methods: {
+    post: function () {
+      this.client.post('/games', { setting: { width: 3, height: 3, numMines: 2 } })
+        .then(function (response) {
+          /* eslint-disable no-console */
+          console.log(JSON.stringify(response.data))
+        })
+    },
+    open: function (x, y) {
+      const c = this.client
+      this.client.post('/games/1/cells/open', { x: 0, y: 0 })
+        .then(function (response) {
+          c.get('/games/1')
+            .then(function (response) {
+              /* eslint-disable no-console */
+              console.log(JSON.stringify(response.data))
+            })
+        })
+    }
+  }
 }
 </script>
 
