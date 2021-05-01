@@ -22,6 +22,7 @@
 
 <script>
 import MsCell from '@/components/presentations/MsCell.vue'
+import Field from '@/models/Field'
 
 export default {
   components: {
@@ -32,7 +33,7 @@ export default {
       return this.$store.state.game
     },
     field: function () {
-      return this.game.field
+      return new Field(this.game.width, this.game.height)
     },
     status: function () {
       return this.game.status

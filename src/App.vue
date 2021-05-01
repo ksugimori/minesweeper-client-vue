@@ -3,17 +3,6 @@
     <header>
       <div class="contents">
         <h1>minesweeper-client-vue</h1>
-        <nav>
-          <router-link to="/">
-            How to
-          </router-link>
-          <router-link to="/play">
-            Play
-          </router-link>
-          <router-link to="/setting">
-            Setting
-          </router-link>
-        </nav>
       </div>
     </header>
     <main>
@@ -28,39 +17,40 @@
       >
         OPEN
       </button>
-      <router-view />
+      <play />
     </main>
   </div>
 </template>
 
 <script>
+import Play from '@/components/pages/Play.vue'
 import 'normalize.css'
 import axios from 'axios'
 
 export default {
   name: 'App',
+  components: {
+    Play
+  },
   data: function () {
-    return { client: axios.create({
-      baseURL: '/api'
-    }) }
+    return {
+      client: axios.create({
+        baseURL: '/api'
+      })
+    }
   },
   methods: {
-    post: function () {
-      this.client.post('/games', { setting: { width: 3, height: 3, numMines: 2 } })
-        .then(function (response) {
-          /* eslint-disable no-console */
-          console.log(JSON.stringify(response.data))
-        })
+    post: async function () {
+      let setting = { width: 3, height: 4, numMines: 2 }
+      const response = await this.client.post('/games', { setting })
+
+      this.$store.commit('updateGame', { game: response.data })
     },
     open: function (x, y) {
-      const c = this.client
-      this.client.post('/games/1/cells/open', { x: 0, y: 0 })
+      const id = this.$store.state.game.id
+      this.client.post(`/games/${id}/cells/open`, { x: 0, y: 0 })
         .then(function (response) {
-          c.get('/games/1')
-            .then(function (response) {
-              /* eslint-disable no-console */
-              console.log(JSON.stringify(response.data))
-            })
+          window.console.log(response)
         })
     }
   }
