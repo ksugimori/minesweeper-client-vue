@@ -34,7 +34,7 @@ export default {
       if (this.status.isEnd) {
         return 0
       } else {
-        return this.game.setting.numMines - this.game.flagCount
+        return this.game.numMines - this.game.cells.flat().filter(e => e.isFlag).length
       }
     },
     playTime: function () {
