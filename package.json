@@ -13,7 +13,6 @@
     "core-js": "^2.6.12",
     "normalize.css": "^8.0.1",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.3",
     "vuex": "^3.6.0"
   },
   "devDependencies": {

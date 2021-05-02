@@ -6,12 +6,6 @@
       </div>
     </header>
     <main>
-      <button
-        id="post_btn"
-        @click="post"
-      >
-        New Game
-      </button>
       <play />
     </main>
   </div>
@@ -19,31 +13,12 @@
 
 <script>
 import Play from '@/components/pages/Play.vue'
-import Game from '@/models/Game.js'
 import 'normalize.css'
-import axios from 'axios'
 
 export default {
   name: 'App',
   components: {
     Play
-  },
-  data: function () {
-    return {
-      client: axios.create({
-        baseURL: '/api'
-      })
-    }
-  },
-  methods: {
-    post: async function () {
-      let setting = { width: 9, height: 9, numMines: 5 }
-      const response = await this.client.post('/games', { setting })
-
-      const game = Game.parse(response.data)
-
-      this.$store.commit('updateGame', { game })
-    }
   }
 }
 </script>
