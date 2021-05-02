@@ -12,11 +12,6 @@
       >
         New Game
       </button>
-      <button
-        @click="open(0, 0)"
-      >
-        OPEN
-      </button>
       <play />
     </main>
   </div>
@@ -42,22 +37,12 @@ export default {
   },
   methods: {
     post: async function () {
-      let setting = { width: 5, height: 5, numMines: 3 }
+      let setting = { width: 9, height: 9, numMines: 5 }
       const response = await this.client.post('/games', { setting })
 
       const game = Game.parse(response.data)
 
       this.$store.commit('updateGame', { game })
-    },
-    open: function (x, y) {
-      const id = this.$store.state.game.id
-      this.client.post(`/games/${id}/open-cells`, { x: 0, y: 0 })
-        .then(response => {
-          const game = this.$store.state.game
-          game.openCells = response.data
-
-          this.$store.commit('updateGame', { game })
-        })
     }
   }
 }
