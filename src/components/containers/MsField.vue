@@ -23,17 +23,33 @@
 <script>
 import MsCell from '@/components/presentations/MsCell.vue'
 import Field from '@/models/Field'
+import axios from 'axios'
 
 export default {
   components: {
     MsCell
+  },
+  data: function () {
+    return {
+      client: axios.create({
+        baseURL: '/api'
+      })
+    }
   },
   computed: {
     game: function () {
       return this.$store.state.game
     },
     field: function () {
-      return new Field(this.game.width, this.game.height)
+      const f = new Field(this.game.width, this.game.height)
+      this.game.openCells.forEach(p => {
+        const cell = f.cellAt(p)
+        cell.open()
+        cell.count = p.count
+      })
+      this.game.flags.forEach(p => f.cellAt(p).flag())
+      window.console.log(f)
+      return f
     },
     status: function () {
       return this.game.status
@@ -41,10 +57,25 @@ export default {
   },
   methods: {
     open: function (x, y) {
-      this.$store.commit('open', { x, y })
+      // TODO actions として整理
+      const id = this.$store.state.game.id
+      this.client.post(`/games/${id}/open-cells`, { x, y })
+        .then(response => {
+          const game = this.$store.state.game
+          game.openCells = response.data
+
+          this.$store.commit('updateGame', { game })
+        })
     },
     flag: function (x, y) {
-      this.$store.commit('flag', { x, y })
+      const id = this.$store.state.game.id
+      this.client.post(`/games/${id}/flags`, { x, y })
+        .then(response => {
+          const game = this.$store.state.game
+          game.flags = response.data
+
+          this.$store.commit('updateGame', { game })
+        })
     }
   }
 }

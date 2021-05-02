@@ -41,16 +41,19 @@ export default {
   },
   methods: {
     post: async function () {
-      let setting = { width: 3, height: 4, numMines: 2 }
+      let setting = { width: 5, height: 5, numMines: 3 }
       const response = await this.client.post('/games', { setting })
 
       this.$store.commit('updateGame', { game: response.data })
     },
     open: function (x, y) {
       const id = this.$store.state.game.id
-      this.client.post(`/games/${id}/cells/open`, { x: 0, y: 0 })
-        .then(function (response) {
-          window.console.log(response)
+      this.client.post(`/games/${id}/open-cells`, { x: 0, y: 0 })
+        .then(response => {
+          const game = this.$store.state.game
+          game.openCells = response.data
+
+          this.$store.commit('updateGame', { game })
         })
     }
   }
