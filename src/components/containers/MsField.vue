@@ -22,7 +22,6 @@
 
 <script>
 import MsCell from '@/components/presentations/MsCell.vue'
-import Field from '@/models/Field'
 import axios from 'axios'
 
 export default {
@@ -41,15 +40,7 @@ export default {
       return this.$store.state.game
     },
     field: function () {
-      const f = new Field(this.game.width, this.game.height)
-      this.game.openCells.forEach(p => {
-        const cell = f.cellAt(p)
-        cell.open()
-        cell.count = p.count
-      })
-      this.game.flags.forEach(p => f.cellAt(p).flag())
-      window.console.log(f)
-      return f
+      return this.game.field
     },
     status: function () {
       return this.game.status
@@ -62,7 +53,7 @@ export default {
       this.client.post(`/games/${id}/open-cells`, { x, y })
         .then(response => {
           const game = this.$store.state.game
-          game.openCells = response.data
+          game.open(response.data)
 
           this.$store.commit('updateGame', { game })
         })
@@ -72,7 +63,7 @@ export default {
       this.client.post(`/games/${id}/flags`, { x, y })
         .then(response => {
           const game = this.$store.state.game
-          game.flags = response.data
+          game.flag(x, y)
 
           this.$store.commit('updateGame', { game })
         })

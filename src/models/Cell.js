@@ -54,6 +54,10 @@ class Cell {
     this.isOpen = true
   }
 
+  close () {
+    this.isOpen = false
+  }
+
   /**
    * 地雷をセットする
    */

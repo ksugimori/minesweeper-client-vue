@@ -24,6 +24,7 @@
 
 <script>
 import Play from '@/components/pages/Play.vue'
+import Game from '@/models/Game.js'
 import 'normalize.css'
 import axios from 'axios'
 
@@ -44,7 +45,9 @@ export default {
       let setting = { width: 5, height: 5, numMines: 3 }
       const response = await this.client.post('/games', { setting })
 
-      this.$store.commit('updateGame', { game: response.data })
+      const game = Game.parse(response.data)
+
+      this.$store.commit('updateGame', { game })
     },
     open: function (x, y) {
       const id = this.$store.state.game.id

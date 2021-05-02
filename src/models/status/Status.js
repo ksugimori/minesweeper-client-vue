@@ -8,4 +8,16 @@ const PLAY = new PlayStatus()
 const WIN = new WinStatus()
 const LOSE = new LoseStatus()
 
-export default { INIT, PLAY, WIN, LOSE }
+function parse (value) {
+  if (value === 'INIT') {
+    return INIT
+  } else if (value === 'PLAY') {
+    return PLAY
+  } else if (value === 'WIN') {
+    return WIN
+  } else {
+    return LOSE
+  }
+}
+
+export default { INIT, PLAY, WIN, LOSE, parse }
