@@ -19,12 +19,21 @@
 import MsStatusBarItem from '@/components/containers/MsStatusBarItem.vue'
 import MsCounter from '@/components/presentations/MsCounter.vue'
 import MsResetButton from '@/components/presentations/MsResetButton.vue'
+import Game from '@/models/Game.js'
+import axios from 'axios'
 
 export default {
   components: {
     MsStatusBarItem,
     MsCounter,
     MsResetButton
+  },
+  data: function () {
+    return {
+      client: axios.create({
+        baseURL: '/api'
+      })
+    }
   },
   computed: {
     game: function () {
@@ -49,8 +58,13 @@ export default {
     }
   },
   methods: {
-    reset: function () {
-      this.$store.commit('initialize')
+    reset: async function () {
+      let setting = { width: 9, height: 9, numMines: 5 }
+      const response = await this.client.post('/games', { setting })
+
+      const game = Game.parse(response.data)
+
+      this.$store.commit('updateGame', { game })
     }
   }
 }
