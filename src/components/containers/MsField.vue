@@ -60,13 +60,22 @@ export default {
     },
     flag: function (x, y) {
       const id = this.$store.state.game.id
-      this.client.post(`/games/${id}/flags`, { x, y })
-        .then(response => {
-          const game = this.$store.state.game
-          game.flag(x, y)
+      const game = this.$store.state.game
+      const cell = this.$store.state.game.field.cellAt({ x, y })
 
-          this.$store.commit('updateGame', { game })
-        })
+      if (cell.isFlag) {
+        this.client.delete(`/games/${id}/flags/x${x}y${y}`)
+          .then(response => {
+            cell.unflag()
+            this.$store.commit('updateGame', { game })
+          })
+      } else {
+        this.client.post(`/games/${id}/flags`, { x, y })
+          .then(response => {
+            cell.flag()
+            this.$store.commit('updateGame', { game })
+          })
+      }
     }
   }
 }
