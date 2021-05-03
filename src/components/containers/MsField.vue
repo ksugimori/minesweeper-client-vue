@@ -47,34 +47,34 @@ export default {
     }
   },
   methods: {
-    open: function (x, y) {
+    open: async function (x, y) {
       // TODO actions として整理
       const id = this.$store.state.game.id
-      this.client.post(`/games/${id}/open-cells`, { x, y })
-        .then(response => {
-          const game = this.$store.state.game
-          game.open(response.data)
-          this.$store.commit('updateGame', { game })
 
-          this.client.get(`/games/${id}/status`)
-            .then(res => {
-              const status = res.data.status
-              if (status === 'WIN' || status === 'LOSE') {
-                this.client.get(`/games/${id}`)
-                  .then(gameRes => {
-                    game.status = gameRes.data.status
-                    gameRes.data.mines.forEach(p => {
-                      game.field.cellAt(p).mine()
-                    })
-                    game.field.rows.flat().forEach(c => {
-                      c.unflag()
-                      c.open()
-                    })
-                    this.$store.commit('updateGame', { game })
-                  })
-              }
-            })
-        })
+      const response = await this.client.post(`/games/${id}/open-cells`, { x, y })
+
+      const game = this.$store.state.game
+      game.open(response.data)
+      this.$store.commit('updateGame', { game })
+
+      // TODO 変数名変えたい
+      const status = await this.client.get(`/games/${id}/status`).then(r => r.data.status)
+      if (status !== 'WIN' && status !== 'LOSE') {
+        return
+      }
+
+      const latestGame = await this.client.get(`/games/${id}`).then(r => r.data)
+
+      game.status = latestGame.status
+      latestGame.mines.forEach(p => {
+        game.field.cellAt(p).mine()
+      })
+      game.field.rows.flat().forEach(cell => {
+        cell.unflag()
+        cell.open()
+      })
+
+      this.$store.commit('updateGame', { game })
     },
     flag: function (x, y) {
       const id = this.$store.state.game.id
