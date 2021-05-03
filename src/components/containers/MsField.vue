@@ -54,8 +54,18 @@ export default {
         .then(response => {
           const game = this.$store.state.game
           game.open(response.data)
-
           this.$store.commit('updateGame', { game })
+
+          this.client.get(`/games/${id}/status`)
+            .then(res => {
+              const status = res.data.status
+              if (status === 'WIN' || status === 'LOSE') {
+                this.client.get(`/games/${id}`)
+                  .then(gameRes => {
+                    this.$store.commit('updateGame', { game: gameRes.data })
+                  })
+              }
+            })
         })
     },
     flag: function (x, y) {

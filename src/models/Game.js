@@ -48,7 +48,7 @@ class Game {
 
     result.id = data.id
 
-    result.status = Status.parse(data.status)
+    result.status = data.status
 
     for (const p of data.openCells) {
       const cell = result.field.cellAt(p)
