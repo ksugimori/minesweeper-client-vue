@@ -62,7 +62,15 @@ export default {
               if (status === 'WIN' || status === 'LOSE') {
                 this.client.get(`/games/${id}`)
                   .then(gameRes => {
-                    this.$store.commit('updateGame', { game: gameRes.data })
+                    game.status = gameRes.data.status
+                    gameRes.data.mines.forEach(p => {
+                      game.field.cellAt(p).mine()
+                    })
+                    game.field.rows.flat().forEach(c => {
+                      c.unflag()
+                      c.open()
+                    })
+                    this.$store.commit('updateGame', { game })
                   })
               }
             })
