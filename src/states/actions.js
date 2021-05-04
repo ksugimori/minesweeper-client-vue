@@ -43,13 +43,13 @@ const actions = {
     const latestGame = await axios.get(`/api/games/${game.id}`).then(r => r.data)
 
     game.status = latestGame.status
-    latestGame.mines.forEach(p => {
-      game.field.cellAt(p).mine()
-    })
-    latestGame.openCells.forEach(p => {
+    latestGame.cells.forEach(p => {
       const cell = game.field.cellAt(p)
       cell.unflag()
       cell.open()
+      if (p.isMine) {
+        cell.mine()
+      }
       cell.count = p.count
     })
 

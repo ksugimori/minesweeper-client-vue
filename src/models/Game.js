@@ -50,12 +50,12 @@ class Game {
 
     result.status = data.status
 
-    for (const p of data.openCells) {
+    data.cells.filter(cell => cell.isOpen).forEach(p => {
       const cell = result.field.cellAt(p)
       cell.open()
       cell.count = p.count
-    }
-    data.flags.forEach(p => result.field.cellAt(p).flag())
+    })
+    data.cells.filter(cell => cell.isFlag).forEach(p => result.field.cellAt(p).flag())
 
     return result
   }
