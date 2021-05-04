@@ -52,7 +52,6 @@ class Game {
 
     for (const p of data.openCells) {
       const cell = result.field.cellAt(p)
-      window.console.log(JSON.stringify(p))
       cell.open()
       cell.count = p.count
     }
