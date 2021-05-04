@@ -57,7 +57,7 @@ export default {
       game.open(response.data)
       this.$store.commit('updateGame', { game })
 
-      // TODO 変数名変えたい
+      // ステータスが終了状態になっていないか確認
       const status = await this.client.get(`/games/${id}/status`).then(r => r.data.status)
       if (status !== 'WIN' && status !== 'LOSE') {
         return
@@ -69,9 +69,11 @@ export default {
       latestGame.mines.forEach(p => {
         game.field.cellAt(p).mine()
       })
-      game.field.rows.flat().forEach(cell => {
+      latestGame.openCells.forEach(p => {
+        const cell = game.field.cellAt(p)
         cell.unflag()
         cell.open()
+        cell.count = p.count
       })
 
       this.$store.commit('updateGame', { game })
