@@ -30,7 +30,7 @@ describe('Row.vue', () => {
 
     let store = new Vuex.Store({
       state: { game },
-      mutations: { open: mockOpen }
+      actions: { open: mockOpen }
     })
 
     const wrapper = mount(MsField, { store, localVue })
@@ -54,7 +54,7 @@ describe('Row.vue', () => {
 
     let store = new Vuex.Store({
       state: { game },
-      mutations: { flag: mockFlag }
+      actions: { flag: mockFlag }
     })
 
     const wrapper = mount(MsField, { store, localVue })
