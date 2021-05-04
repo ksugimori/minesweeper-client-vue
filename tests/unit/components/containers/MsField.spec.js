@@ -9,8 +9,7 @@ localVue.use(Vuex)
 
 describe('Row.vue', () => {
   test('配列数だけ Row が作成されること', () => {
-    const game = new Game()
-    game.setting.merge({ width: 3, height: 2, numMines: 1 })
+    const game = new Game(3, 2, 1)
     game.initialize()
 
     let store = new Vuex.Store({
@@ -23,8 +22,7 @@ describe('Row.vue', () => {
   })
 
   test('Cell をクリックすると click イベントが発火され、インデックスが引数として渡されること', () => {
-    const game = new Game()
-    game.setting.merge({ width: 3, height: 2, numMines: 1 })
+    const game = new Game(3, 2, 1)
     game.initialize()
 
     // モックする関数
@@ -48,8 +46,7 @@ describe('Row.vue', () => {
   })
 
   test('Cell を右クリックすると right-click イベントが発火され、インデックスが引数として渡されること', () => {
-    const game = new Game()
-    game.setting.merge({ width: 3, height: 2, numMines: 1 })
+    const game = new Game(3, 2, 1)
     game.initialize()
 
     // モックする関数
