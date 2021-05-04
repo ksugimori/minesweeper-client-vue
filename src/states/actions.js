@@ -60,7 +60,7 @@ const actions = {
    * ゲームをリセットして新しく作成しなおす。
    */
   async reset ({ commit }, setting) {
-    const response = await axios.post('/api/games', { setting })
+    const response = await axios.post('/api/games', setting)
 
     const game = Game.parse(response.data)
 
