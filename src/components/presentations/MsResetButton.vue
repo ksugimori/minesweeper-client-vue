@@ -8,21 +8,19 @@
 </template>
 
 <script>
-import Status from '@/models/status/Status.js'
-
 export default {
   props: {
     status: {
-      type: Object,
-      default: Status.INIT
+      type: String,
+      default: 'INIT'
     }
   },
   computed: {
     text: function () {
       switch (this.status) {
-        case Status.WIN:
+        case 'WIN':
           return 'Win!'
-        case Status.LOSE:
+        case 'LOSE':
           return 'Lose'
         default:
           return 'Reset'
@@ -32,9 +30,9 @@ export default {
   methods: {
     colorClass: function () {
       switch (this.status) {
-        case Status.WIN:
+        case 'WIN':
           return 'color-win'
-        case Status.LOSE:
+        case 'LOSE':
           return 'color-lose'
         default:
           return ''

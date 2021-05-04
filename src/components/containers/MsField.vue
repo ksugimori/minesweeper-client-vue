@@ -47,26 +47,55 @@ export default {
     }
   },
   methods: {
-    open: function (x, y) {
+    open: async function (x, y) {
       // TODO actions として整理
       const id = this.$store.state.game.id
-      this.client.post(`/games/${id}/open-cells`, { x, y })
-        .then(response => {
-          const game = this.$store.state.game
-          game.open(response.data)
 
-          this.$store.commit('updateGame', { game })
-        })
+      const response = await this.client.post(`/games/${id}/open-cells`, { x, y })
+
+      const game = this.$store.state.game
+      game.open(response.data)
+      this.$store.commit('updateGame', { game })
+
+      // ステータスが終了状態になっていないか確認
+      const status = await this.client.get(`/games/${id}/status`).then(r => r.data.status)
+      if (status !== 'WIN' && status !== 'LOSE') {
+        return
+      }
+
+      const latestGame = await this.client.get(`/games/${id}`).then(r => r.data)
+
+      game.status = latestGame.status
+      latestGame.mines.forEach(p => {
+        game.field.cellAt(p).mine()
+      })
+      latestGame.openCells.forEach(p => {
+        const cell = game.field.cellAt(p)
+        cell.unflag()
+        cell.open()
+        cell.count = p.count
+      })
+
+      this.$store.commit('updateGame', { game })
     },
     flag: function (x, y) {
       const id = this.$store.state.game.id
-      this.client.post(`/games/${id}/flags`, { x, y })
-        .then(response => {
-          const game = this.$store.state.game
-          game.flag(x, y)
+      const game = this.$store.state.game
+      const cell = this.$store.state.game.field.cellAt({ x, y })
 
-          this.$store.commit('updateGame', { game })
-        })
+      if (cell.isFlag) {
+        this.client.delete(`/games/${id}/flags/x${x}y${y}`)
+          .then(response => {
+            cell.unflag()
+            this.$store.commit('updateGame', { game })
+          })
+      } else {
+        this.client.post(`/games/${id}/flags`, { x, y })
+          .then(response => {
+            cell.flag()
+            this.$store.commit('updateGame', { game })
+          })
+      }
     }
   }
 }
