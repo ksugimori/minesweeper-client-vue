@@ -1,26 +1,26 @@
 <template>
   <div id="app">
+    <div id="nav">
+      <router-link to="/">
+        Home
+      </router-link> |
+      <router-link to="/play">
+        Play
+      </router-link>
+    </div>
     <header>
       <div class="contents">
         <h1>minesweeper-client-vue</h1>
       </div>
     </header>
     <main>
-      <play />
+      <router-view />
     </main>
   </div>
 </template>
 
 <script>
-import Play from '@/components/pages/Play.vue'
-import 'normalize.css'
 
-export default {
-  name: 'App',
-  components: {
-    Play
-  }
-}
 </script>
 
 <style>
