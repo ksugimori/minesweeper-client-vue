@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="['btn', active ? 'btn-active' : '']"
+    :class="['btn']"
     @click="$emit('click')"
   >
     <slot />
@@ -11,7 +11,6 @@
 
 export default {
   props: {
-    active: Boolean,
     setting: {
       type: Object,
       default: null
@@ -25,7 +24,7 @@ export default {
   cursor: pointer;
   text-decoration: none;
   border: 0.3rem solid #35495e;
-  width: 7rem;
+  min-width: 7rem;
   height: 3rem;
   font-size: 1.2rem;
   background-color: #35495e;

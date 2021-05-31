@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Game from '@/models/Game.js'
+import router from '@/router.js'
 
 const actions = {
   /**
@@ -54,6 +55,19 @@ const actions = {
     })
 
     commit('updateGame', { game })
+  },
+
+  /**
+   * 新規ゲームを作成する
+   */
+  async create ({ commit }, setting) {
+    const response = await axios.post('/api/games', setting)
+
+    const game = Game.parse(response.data)
+
+    commit('updateGame', { game })
+
+    router.push('/play')
   },
 
   /**

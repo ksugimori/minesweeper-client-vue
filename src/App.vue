@@ -2,25 +2,19 @@
   <div id="app">
     <header>
       <div class="contents">
-        <h1>minesweeper-client-vue</h1>
+        <router-link to="/">
+          <h1>minesweeper-client-vue</h1>
+        </router-link>
       </div>
     </header>
     <main>
-      <play />
+      <router-view />
     </main>
   </div>
 </template>
 
 <script>
-import Play from '@/components/pages/Play.vue'
-import 'normalize.css'
 
-export default {
-  name: 'App',
-  components: {
-    Play
-  }
-}
 </script>
 
 <style>
@@ -53,6 +47,15 @@ header {
   margin-bottom: 1rem;
   background-color: #42b983;
   color: #fff;
+}
+
+header .router-link-active {
+  color: #fff;
+  text-decoration: none;
+}
+
+header .router-link-active:hover {
+  color: #dbf3e8;
 }
 
 header h1 {
