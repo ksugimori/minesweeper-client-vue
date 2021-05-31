@@ -50,7 +50,11 @@ export default {
   },
   methods: {
     reset: async function () {
-      let setting = { width: 9, height: 9, numMines: 5 }
+      let setting = {
+        width: this.game.width,
+        height: this.game.height,
+        numMines: this.game.numMines
+      }
       this.$store.dispatch('reset', setting)
     }
   }
