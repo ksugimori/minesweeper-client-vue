@@ -13,20 +13,31 @@ class Game {
     this.numMines = numMines
 
     this.status = Status.INIT
-    this.StopWatch = new StopWatch()
+    this.stopWatch = new StopWatch()
 
     this.field = new Field(width, height)
   }
 
   initialize () {
     this.status = Status.INIT
-    this.StopWatch = new StopWatch()
+    this.stopWatch = new StopWatch()
 
     this.field = new Field(this.width, this.height)
   }
 
   get flagCount () {
     return this.field.points(cell => cell.isFlag).length
+  }
+
+  get playTime () {
+    const start = this.stopWatch.startTime
+    const end = this.stopWatch.endTime
+
+    if (start && end) {
+      return Math.floor((end - start) / 1000)
+    } else {
+      return this.stopWatch.playTime
+    }
   }
 
   open (openCells) {

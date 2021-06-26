@@ -35,9 +35,20 @@ const actions = {
     commit('updateGame', { game })
 
     // ステータスが終了状態になっていないか確認
-    const status = await axios.get(`/api/games/${game.id}/status`).then(r => r.data.status)
-    if (status !== 'WIN' && status !== 'LOSE') {
+    const status = await axios.get(`/api/games/${game.id}/status`).then(r => r.data)
+    if (status.status !== 'WIN' && status.status !== 'LOSE') {
+      if (!game.stopWatch.timer) {
+        game.stopWatch.start()
+      }
+
+      game.stopWatch.startTime = new Date(status.startTime).getTime()
+      commit('updateGame', { game })
       return
+    }
+
+    // 終了していたらタイマーを止める
+    if (status.endTime) {
+      game.stopWatch.stop()
     }
 
     // 終了していれば最新の状態を取得しなおす
