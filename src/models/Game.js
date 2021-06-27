@@ -41,7 +41,6 @@ class Game {
   }
 
   open (openCells) {
-    this.field.rows.flat().forEach(c => c.close())
     for (const p of openCells) {
       const cell = this.field.cellAt(p)
       cell.open()
